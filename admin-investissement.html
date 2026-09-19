@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>JASON INVEST — Investissements</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #07111f;
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 250px;
+      height: 100vh;
+      background: #0b192b;
+      border-right: 1px solid #1d3048;
+      z-index: 1000;
+      overflow-y: auto;
+    }
+
+    .logo {
+      padding: 24px 18px;
+      border-bottom: 1px solid #1d3048;
+    }
+
+    .logo h1 {
+      color: #d8aa45;
+      font-size: 22px;
+    }
+
+    .logo p {
+      color: #8fa2ba;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .nav {
+      padding: 15px 10px;
+    }
+
+    .nav a {
+      display: block;
+      text-decoration: none;
+      color: #b8c6d8;
+      padding: 13px 14px;
+      border-radius: 9px;
+      margin-bottom: 5px;
+    }
+
+    .nav a:hover,
+    .nav a.active {
+      background: #152a43;
+      color: #fff;
+    }
+
+    .nav a.active {
+      border-left: 3px solid #d8aa45;
+    }
+
+    .logout {
+      color: #ff8f8f !important;
+    }
+
+    .main {
+      margin-left: 250px;
+      padding: 25px;
+    }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      z-index: 1101;
+      border: 0;
+      background: #0e1d31;
+      color: #fff;
+      padding: 10px 13px;
+      border-radius: 9px;
+      font-size: 21px;
+      cursor: pointer;
+    }
+
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .65);
+      z-index: 900;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .topbar h2 {
+      font-size: 25px;
+    }
+
+    .admin-badge {
+      background: #142942;
+      border: 1px solid #2c4563;
+      color: #d8aa45;
+      padding: 9px 13px;
+      border-radius: 20px;
+      font-size: 13px;
+    }
+
+    .card {
+      background: #0c1b2e;
+      border: 1px solid #1d3048;
+      border-radius: 14px;
+      padding: 20px;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .search {
+      flex: 1;
+      min-width: 220px;
+      background: #081524;
+      border: 1px solid #243b56;
+      color: #fff;
+      padding: 13px;
+      border-radius: 9px;
+      outline: none;
+    }
+
+    .search:focus {
+      border-color: #d8aa45;
+    }
+
+    .refresh {
+      background: #d8aa45;
+      color: #111;
+      border: 0;
+      padding: 12px 18px;
+      border-radius: 9px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .message {
+      display: none;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+
+    .message.show {
+      display: block;
+    }
+
+    .message.error {
+      background: #401b22;
+      color: #ffb1b1;
+    }
+
+    .message.success {
+      background: #123c2b;
+      color: #9ff0c5;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      min-width: 1100px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 14px 12px;
+      border-bottom: 1px solid #1d3048;
+    }
+
+    th {
+      color: #d8aa45;
+      font-size: 13px;
+    }
+
+    td {
+      color: #d4deea;
+      font-size: 14px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 9px;
+      border-radius: 15px;
+      font-size: 12px;
+    }
+
+    .active {
+      background: #123c2b;
+      color: #8ff0bf;
+    }
+
+    .pending {
+      background: #3d3215;
+      color: #ffd96b;
+    }
+
+    .completed {
+      background: #17365b;
+      color: #8ecaff;
+    }
+
+    .cancelled,
+    .rejected {
+      background: #411d24;
+      color: #ffaaaa;
+    }
+
+    .empty {
+      text-align: center;
+      color: #8192a8;
+      padding: 40px 10px;
+    }
+
+    @media (max-width: 800px) {
+      .sidebar {
+        transform: translateX(-100%);
+        transition: .25s;
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .main {
+        margin-left: 0;
+        padding: 75px 15px 20px;
+      }
+
+      .mobile-menu {
+        display: block;
+      }
+
+      .overlay.open {
+        display: block;
+      }
+
+      .admin-badge {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <button
+    id="mobileMenu"
+    class="mobile-menu"
+    type="button"
+  >
+    ☰
+  </button>
+
+  <div id="overlay" class="overlay"></div>
+
+  <aside id="sidebar" class="sidebar">
+
+    <div class="logo">
+      <h1>JASON INVEST</h1>
+      <p>ADMINISTRATEUR</p>
+    </div>
+
+    <nav class="nav">
+
+      <a href="admin.html">
+        📊 Tableau de bord
+      </a>
+
+      <a href="client.html">
+        👥 Clients
+      </a>
+
+      <a href="depot.html">
+        💰 Dépôts
+      </a>
+
+      <a href="retrait.html">
+        💸 Retraits
+      </a>
+
+      <a href="investissement.html" class="active">
+        📈 Investissements
+      </a>
+
+      <a href="vip.html">
+        👑 VIP
+      </a>
+
+      <a href="transaction.html">
+        🧾 Transactions
+      </a>
+
+      <a href="notifications.html">
+        🔔 Notifications
+      </a>
+
+      <a href="assistant.html">
+        🤖 Assistant IA
+      </a>
+
+      <a href="#" id="logoutButton" class="logout">
+        🚪 Déconnexion
+      </a>
+
+    </nav>
+
+  </aside>
+
+  <main class="main">
+
+    <div class="topbar">
+
+      <h2>📈 Gestion des investissements</h2>
+
+      <div class="admin-badge">
+        ADMIN
+      </div>
+
+    </div>
+
+    <div id="message" class="message"></div>
+
+    <div class="card">
+
+      <div class="toolbar">
+
+        <input
+          id="searchInput"
+          class="search"
+          type="search"
+          placeholder="Rechercher un client, plan ou statut..."
+          autocomplete="off"
+        >
+
+        <button
+          id="refreshButton"
+          class="refresh"
+          type="button"
+        >
+          Actualiser
+        </button>
+
+      </div>
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+
+            <tr>
+              <th>Client</th>
+              <th>Téléphone</th>
+              <th>Plan</th>
+              <th>Capital</th>
+              <th>Gain indiqué</th>
+              <th>Durée</th>
+              <th>Début</th>
+              <th>Fin</th>
+              <th>Statut</th>
+            </tr>
+
+          </thead>
+
+          <tbody id="investmentsContainer">
+
+            <tr>
+              <td colspan="9" class="empty">
+                Chargement des investissements...
+              </td>
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <script src="app.js"></script>
+  <script src="admin-investissement.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>JASON INVEST — Notifications</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background: #07152d;
+            color: white;
+            z-index: 1000;
+            overflow-y: auto;
+            transition: transform .3s ease;
+        }
+
+        .logo {
+            padding: 25px 20px;
+            border-bottom: 1px solid rgba(255,255,255,.1);
+        }
+
+        .logo h2 {
+            color: #d6a84f;
+            font-size: 21px;
+        }
+
+        .logo p {
+            margin-top: 5px;
+            color: #aeb8c9;
+            font-size: 12px;
+        }
+
+        .nav {
+            padding: 15px 10px;
+        }
+
+        .nav-btn {
+            width: 100%;
+            border: 0;
+            background: transparent;
+            color: #dbe3f0;
+            padding: 14px 15px;
+            margin-bottom: 5px;
+            border-radius: 9px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-btn:hover {
+            background: #10254a;
+            color: white;
+        }
+
+        .nav-btn.active {
+            background: #c99a3e;
+            color: #07152d;
+            font-weight: bold;
+        }
+
+        .logout {
+            color: #ff9f9f;
+        }
+
+        /* MAIN */
+        .main {
+            margin-left: 250px;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            height: 70px;
+            background: white;
+            border-bottom: 1px solid #e4e8ef;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .topbar h1 {
+            font-size: 21px;
+            color: #07152d;
+        }
+
+        .top-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            border: 0;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-gold {
+            background: #c99a3e;
+            color: #07152d;
+        }
+
+        .btn-dark {
+            background: #07152d;
+            color: white;
+        }
+
+        .content {
+            padding: 25px;
+        }
+
+        /* MESSAGE */
+        .message {
+            display: none;
+            padding: 13px 15px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            font-size: 14px;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .message.success {
+            background: #e5f7ec;
+            color: #17733b;
+        }
+
+        .message.error {
+            background: #fdeaea;
+            color: #a52828;
+        }
+
+        .message.info {
+            background: #e9f1ff;
+            color: #2455a4;
+        }
+
+        /* FORM */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 15px rgba(0,0,0,.05);
+        }
+
+        .card-title {
+            font-size: 18px;
+            color: #07152d;
+            margin-bottom: 18px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 7px;
+            color: #3d4656;
+        }
+
+        .form-control {
+            width: 100%;
+            border: 1px solid #dce2eb;
+            border-radius: 8px;
+            padding: 12px 13px;
+            font-size: 14px;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .form-control:focus {
+            border-color: #c99a3e;
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .send-btn {
+            width: 100%;
+            padding: 13px;
+            border: 0;
+            border-radius: 8px;
+            background: #c99a3e;
+            color: #07152d;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .send-btn:hover {
+            background: #b88a32;
+        }
+
+        .send-btn:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
+        /* NOTIFICATIONS */
+        .notification-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .notification-item {
+            border: 1px solid #e6eaf0;
+            border-radius: 10px;
+            padding: 17px;
+            background: #fff;
+        }
+
+        .notification-item h3 {
+            color: #07152d;
+            font-size: 16px;
+            margin-bottom: 7px;
+        }
+
+        .notification-item p {
+            color: #596477;
+            line-height: 1.5;
+            font-size: 14px;
+            white-space: pre-wrap;
+        }
+
+        .notification-meta {
+            margin-top: 12px;
+            color: #8a94a6;
+            font-size: 12px;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: #788398;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 30px;
+            color: #788398;
+        }
+
+        /* MOBILE */
+        .mobile-menu {
+            display: none;
+            border: 0;
+            background: #07152d;
+            color: white;
+            font-size: 24px;
+            width: 42px;
+            height: 42px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.55);
+            z-index: 900;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
+        @media (max-width: 800px) {
+
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .topbar {
+                padding: 0 15px;
+            }
+
+            .topbar h1 {
+                font-size: 16px;
+            }
+
+            .content {
+                padding: 15px;
+            }
+
+            .top-actions .btn {
+                padding: 8px 10px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar" id="sidebar">
+
+        <div class="logo">
+            <h2>JASON INVEST</h2>
+            <p>Administration</p>
+        </div>
+
+        <nav class="nav">
+
+            <button class="nav-btn" data-page="admin.html">
+                🏠
+                <span>Tableau de bord</span>
+            </button>
+
+            <button class="nav-btn" data-page="admin-client.html">
+                👥
+                <span>Clients</span>
+            </button>
+
+            <button class="nav-btn" data-page="admin-depot.html">
+                💰
+                <span>Dépôts</span>
+            </button>
+
+            <button class="nav-btn" data-page="admin-retrait.html">
+                💸
+                <span>Retraits</span>
+            </button>
+
+            <button class="nav-btn" data-page="admin-investissement.html">
+                📈
+                <span>Investissements</span>
+            </button>
+
+            <button class="nav-btn" data-page="admin-vip.html">
+                👑
+                <span>VIP</span>
+            </button>
+
+            <button class="nav-btn" data-page="admin-transaction.html">
+                📋
+                <span>Transactions</span>
+            </button>
+
+            <button class="nav-btn active" data-page="admin-notifications.html">
+                🔔
+                <span>Notifications</span>
+            </button>
+
+            <button class="nav-btn" data-page="admin-assistant.html">
+                🤖
+                <span>Assistant</span>
+            </button>
+
+            <button class="nav-btn logout" id="logoutButton">
+                🚪
+                <span>Déconnexion</span>
+            </button>
+
+        </nav>
+
+    </aside>
+
+    <div class="overlay" id="overlay"></div>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <div style="display:flex;align-items:center;gap:12px;">
+
+                <button class="mobile-menu" id="mobileMenu">
+                    ☰
+                </button>
+
+                <h1>Notifications</h1>
+
+            </div>
+
+            <div class="top-actions">
+
+                <button class="btn btn-dark" id="backButton">
+                    ← Admin
+                </button>
+
+                <button class="btn btn-gold" id="refreshButton">
+                    ↻ Actualiser
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <section class="content">
+
+            <div id="message" class="message"></div>
+
+
+            <!-- ENVOYER -->
+
+            <div class="card">
+
+                <h2 class="card-title">
+                    📢 Envoyer une notification
+                </h2>
+
+                <form id="notificationForm">
+
+                    <div class="form-group">
+
+                        <label for="notificationTitle">
+                            Titre
+                        </label>
+
+                        <input
+                            type="text"
+                            id="notificationTitle"
+                            class="form-control"
+                            placeholder="Ex : Nouvelle annonce"
+                            maxlength="150"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="notificationMessage">
+                            Message
+                        </label>
+
+                        <textarea
+                            id="notificationMessage"
+                            class="form-control"
+                            placeholder="Écrivez votre notification..."
+                            maxlength="2000"
+                            required
+                        ></textarea>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="send-btn"
+                        id="sendNotificationButton"
+                    >
+                        📤 Envoyer la notification
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <!-- LISTE -->
+
+            <div class="card">
+
+                <h2 class="card-title">
+                    🔔 Notifications envoyées
+                </h2>
+
+                <div
+                    id="notificationsContainer"
+                    class="notification-list"
+                >
+
+                    <div class="loading">
+                        Chargement des notifications...
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script src="app.js"></script>
+  <script src="admin-notification.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Historique - JASON INVEST</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #07111f;
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      height: 70px;
+      background: #0b1728;
+      border-bottom: 1px solid #1b2b42;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+    }
+
+    .menu-btn {
+      width: 42px;
+      height: 42px;
+      border: 0;
+      border-radius: 10px;
+      background: #13243a;
+      color: #fff;
+      font-size: 22px;
+      cursor: pointer;
+      margin-right: 15px;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .logo span {
+      color: #2d8cff;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 70px;
+      left: 0;
+      bottom: 0;
+      width: 260px;
+      background: #0b1728;
+      border-right: 1px solid #1b2b42;
+      padding: 20px 14px;
+      z-index: 999;
+      transition: .3s;
+    }
+
+    .sidebar-user {
+      background: #101f34;
+      border-radius: 14px;
+      padding: 15px;
+      margin-bottom: 18px;
+    }
+
+    .sidebar-user strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .sidebar-user small {
+      color: #8ea2bc;
+      word-break: break-word;
+    }
+
+    .nav {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .nav a {
+      text-decoration: none;
+      color: #aebed2;
+      padding: 13px 14px;
+      border-radius: 10px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      transition: .2s;
+    }
+
+    .nav a:hover,
+    .nav a.active {
+      background: #142943;
+      color: #fff;
+    }
+
+    .main {
+      margin-left: 260px;
+      padding: 100px 25px 30px;
+    }
+
+    .page-title {
+      margin-bottom: 25px;
+    }
+
+    .page-title h1 {
+      font-size: 28px;
+      margin-bottom: 7px;
+    }
+
+    .page-title p {
+      color: #8ea2bc;
+    }
+
+    .card {
+      background: #0b1728;
+      border: 1px solid #1b2b42;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 18px 20px;
+      border-bottom: 1px solid #1b2b42;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-header h2 {
+      font-size: 18px;
+    }
+
+    .refresh-btn {
+      border: 0;
+      background: #1769d2;
+      color: white;
+      padding: 9px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .history-list {
+      padding: 10px;
+    }
+
+    .history-item {
+      padding: 17px;
+      border-bottom: 1px solid #17273c;
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .history-item:last-child {
+      border-bottom: 0;
+    }
+
+    .history-left {
+      display: flex;
+      gap: 13px;
+      align-items: center;
+    }
+
+    .icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #142943;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 19px;
+    }
+
+    .history-info strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .history-info small {
+      color: #8195ae;
+    }
+
+    .history-right {
+      text-align: right;
+    }
+
+    .amount {
+      font-weight: 800;
+      margin-bottom: 5px;
+    }
+
+    .deposit {
+      color: #39d98a;
+    }
+
+    .withdraw {
+      color: #ff7d7d;
+    }
+
+    .investment {
+      color: #ffc857;
+    }
+
+    .pending {
+      color: #ffc857;
+    }
+
+    .completed {
+      color: #39d98a;
+    }
+
+    .failed {
+      color: #ff6b6b;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 50px 20px;
+      color: #8195ae;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #8195ae;
+    }
+
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.6);
+      z-index: 998;
+    }
+
+    @media(max-width: 800px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .overlay.show {
+        display: block;
+      }
+
+      .main {
+        margin-left: 0;
+        padding: 95px 15px 25px;
+      }
+
+      .history-item {
+        align-items: flex-start;
+      }
+
+      .history-right {
+        min-width: 110px;
+      }
+    }
+
+    @media(max-width: 520px) {
+      .history-item {
+        flex-direction: column;
+      }
+
+      .history-right {
+        text-align: left;
+        padding-left: 55px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="topbar">
+    <button class="menu-btn" id="menuButton">☰</button>
+    <div class="logo">JASON<span> INVEST</span></div>
+  </header>
+
+  <div class="overlay" id="overlay"></div>
+
+  <aside class="sidebar" id="sidebar">
+
+    <div class="sidebar-user">
+      <strong id="userName">Chargement...</strong>
+      <small id="userEmail">...</small>
+    </div>
+
+    <nav class="nav">
+      <a href="dash.html">🏠 Tableau de bord</a>
+      <a href="investissement.html">📈 Investissement</a>
+      <a href="translation.html">💳 Dépôt / Retrait</a>
+      <a href="vip.html">👑 VIP</a>
+      <a href="historique.html" class="active">🧾 Historique</a>
+      <a href="notification.html">🔔 Notifications</a>
+      <a href="profil.html">👤 Profil</a>
+      <a href="support.html">💬 Support</a>
+      <a href="#" id="logoutButton">🚪 Déconnexion</a>
+    </nav>
+
+  </aside>
+
+  <main class="main">
+
+    <div class="page-title">
+      <h1>Historique</h1>
+      <p>Consultez l'historique de vos opérations.</p>
+    </div>
+
+    <section class="card">
+
+      <div class="card-header">
+        <h2>Mes opérations</h2>
+        <button class="refresh-btn" id="refreshButton">
+          Actualiser
+        </button>
+      </div>
+
+      <div id="history" class="history-list">
+        <div class="loading">
+          Chargement de votre historique...
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script src="app.js"></script>
+  <script src="historique.js"></script>
+
+</body>
+</html>

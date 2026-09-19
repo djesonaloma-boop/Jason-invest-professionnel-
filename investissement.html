@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>JASON INVEST — Investissement</title>
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+  >
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #07111f;
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    button,
+    input {
+      font-family: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 240px;
+      height: 100vh;
+      background: #0b1728;
+      border-right: 1px solid #172942;
+      padding: 20px 14px;
+      z-index: 1000;
+      overflow-y: auto;
+      transition: .25s;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      padding: 10px;
+      margin-bottom: 25px;
+    }
+
+    .logo i {
+      color: #2d8cff;
+      font-size: 25px;
+    }
+
+    .user-mini {
+      background: #101f34;
+      border: 1px solid #1d3553;
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
+      border-radius: 50%;
+      background: #1769d1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .user-mini strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 3px;
+    }
+
+    .user-mini span {
+      color: #8da1bb;
+      font-size: 12px;
+      display: block;
+      max-width: 150px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .menu {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .menu a {
+      color: #9db0c8;
+      text-decoration: none;
+      padding: 12px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: .2s;
+      font-size: 14px;
+    }
+
+    .menu a:hover,
+    .menu a.active {
+      background: #12335a;
+      color: #fff;
+    }
+
+    .menu a i {
+      width: 20px;
+      text-align: center;
+    }
+
+    .logout {
+      margin-top: 20px;
+      border-top: 1px solid #172942;
+      padding-top: 15px;
+    }
+
+    .logout button {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: #ff6b6b;
+      padding: 12px;
+      text-align: left;
+      border-radius: 9px;
+      font-size: 14px;
+    }
+
+    .logout button:hover {
+      background: #291c25;
+    }
+
+    .main {
+      margin-left: 240px;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      height: 70px;
+      border-bottom: 1px solid #172942;
+      background: #091522;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      position: sticky;
+      top: 0;
+      z-index: 900;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .topbar h1 {
+      font-size: 20px;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .notification {
+      color: #9db0c8;
+      font-size: 18px;
+    }
+
+    .menu-toggle {
+      display: none;
+      border: 0;
+      background: transparent;
+      color: white;
+      font-size: 22px;
+    }
+
+    .content {
+      padding: 28px;
+      max-width: 1400px;
+      margin: auto;
+    }
+
+    .balance-card {
+      background: linear-gradient(135deg, #0e3260, #0b1b31);
+      border: 1px solid #1d4b7e;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .balance-card small {
+      color: #9db0c8;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .balance-card h2 {
+      font-size: 30px;
+    }
+
+    .balance-card i {
+      font-size: 42px;
+      color: #4da3ff;
+    }
+
+    .section-title {
+      margin-bottom: 18px;
+    }
+
+    .section-title h2 {
+      font-size: 21px;
+      margin-bottom: 5px;
+    }
+
+    .section-title p {
+      color: #8295ad;
+      font-size: 14px;
+    }
+
+    .investment-table-box {
+      background: #0b1728;
+      border: 1px solid #1a304b;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .table-title {
+      padding: 20px;
+      border-bottom: 1px solid #1a304b;
+      background: #0d1c2f;
+    }
+
+    .table-title h3 {
+      font-size: 18px;
+      margin-bottom: 6px;
+    }
+
+    .table-title h3 i {
+      color: #4da3ff;
+      margin-right: 8px;
+    }
+
+    .table-title p {
+      color: #8295ad;
+      font-size: 13px;
+    }
+
+    .table-scroll {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    .investment-table {
+      width: 100%;
+      min-width: 900px;
+      border-collapse: collapse;
+    }
+
+    .investment-table th {
+      background: #10243b;
+      color: #9eb3cc;
+      padding: 15px 12px;
+      text-align: left;
+      font-size: 12px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .investment-table td {
+      padding: 15px 12px;
+      border-top: 1px solid #172c45;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .investment-table tbody tr {
+      transition: .2s;
+    }
+
+    .investment-table tbody tr:hover {
+      background: #0f2136;
+    }
+
+    .number {
+      color: #71869f;
+      font-weight: bold;
+    }
+
+    .capital {
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .duration {
+      color: #a5b8ce;
+    }
+
+    .gain {
+      color: #55d69b;
+      font-weight: 700;
+    }
+
+    .total {
+      color: #4da3ff;
+      font-weight: 700;
+    }
+
+    .invest-btn {
+      border: 0;
+      border-radius: 8px;
+      padding: 9px 15px;
+      background: #1769d1;
+      color: #fff;
+      font-weight: 700;
+      font-size: 12px;
+      transition: .2s;
+    }
+
+    .invest-btn:hover {
+      background: #2180ef;
+      transform: translateY(-1px);
+    }
+
+    .custom-investment {
+      margin-top: 24px;
+      background: #0b1728;
+      border: 1px solid #1a304b;
+      border-radius: 16px;
+      padding: 22px;
+    }
+
+    .custom-investment h3 {
+      font-size: 18px;
+      margin-bottom: 7px;
+    }
+
+    .custom-investment h3 i {
+      color: #4da3ff;
+      margin-right: 8px;
+    }
+
+    .custom-investment p {
+      color: #8295ad;
+      font-size: 13px;
+      margin-bottom: 18px;
+    }
+
+    .custom-form {
+      display: flex;
+      gap: 10px;
+    }
+
+    .custom-form input {
+      flex: 1;
+      background: #07111f;
+      border: 1px solid #263c56;
+      border-radius: 9px;
+      padding: 13px;
+      color: #fff;
+      outline: none;
+    }
+
+    .custom-form input:focus {
+      border-color: #287dcc;
+    }
+
+    .custom-form button {
+      border: 0;
+      border-radius: 9px;
+      padding: 0 22px;
+      background: #1769d1;
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .custom-form button:hover {
+      background: #2180ef;
+    }
+
+    .message {
+      display: none;
+      margin-top: 20px;
+      padding: 13px;
+      border-radius: 9px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .message.show {
+      display: block;
+    }
+
+    .message.success {
+      background: #0d2b21;
+      border: 1px solid #1c684d;
+      color: #68e0ae;
+    }
+
+    .message.error {
+      background: #321b20;
+      border: 1px solid #71313b;
+      color: #ff8e9a;
+    }
+
+    .warning {
+      margin-top: 24px;
+      background: #151c27;
+      border: 1px solid #29394d;
+      border-radius: 12px;
+      padding: 15px;
+      color: #9eafc2;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .warning i {
+      color: #e8b94d;
+      margin-right: 7px;
+    }
+
+    .history {
+      margin-top: 35px;
+      background: #0b1728;
+      border: 1px solid #1a304b;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .history-header {
+      padding: 18px 20px;
+      border-bottom: 1px solid #1a304b;
+    }
+
+    .history-header h2 {
+      font-size: 18px;
+    }
+
+    .history-header i {
+      color: #4da3ff;
+      margin-right: 7px;
+    }
+
+    .history-empty {
+      padding: 30px 20px;
+      text-align: center;
+      color: #71869f;
+      font-size: 14px;
+    }
+
+    .history-empty i {
+      font-size: 30px;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 760px) {
+
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .main {
+        margin-left: 0;
+      }
+
+      .menu-toggle {
+        display: block;
+      }
+
+      .topbar {
+        padding: 0 18px;
+      }
+
+      .content {
+        padding: 18px;
+      }
+
+      .balance-card {
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 600px) {
+
+      .balance-card h2 {
+        font-size: 24px;
+      }
+
+      .balance-card i {
+        font-size: 32px;
+      }
+
+      .custom-form {
+        flex-direction: column;
+      }
+
+      .custom-form button {
+        padding: 13px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ==================================================
+       SIDEBAR
+  ================================================== -->
+
+  <aside class="sidebar" id="sidebar">
+
+    <div class="logo">
+      <i class="fa-solid fa-chart-line"></i>
+      JASON INVEST
+    </div>
+
+    <div class="user-mini">
+
+      <div class="avatar" id="avatar">
+        J
+      </div>
+
+      <div>
+        <strong id="sideName">
+          Chargement...
+        </strong>
+
+        <span id="sideEmail">
+          ...
+        </span>
+      </div>
+
+    </div>
+
+    <nav class="menu">
+
+      <a href="dash.html">
+        <i class="fa-solid fa-chart-line"></i>
+        Tableau de bord
+      </a>
+
+      <a
+        href="investissement.html"
+        class="active"
+      >
+        <i class="fa-solid fa-chart-pie"></i>
+        Investissement
+      </a>
+
+      <a href="dash.html#activities">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        Mes activités
+      </a>
+
+      <a href="vip.html">
+        <i class="fa-solid fa-crown"></i>
+        VIP
+      </a>
+
+      <a href="profil.html">
+        <i class="fa-solid fa-user"></i>
+        Mon profil
+      </a>
+
+      <a href="translation.html">
+        <i class="fa-solid fa-money-bill-transfer"></i>
+        Dépôt / Retrait
+      </a>
+
+      <a href="dash.html#history">
+        <i class="fa-solid fa-receipt"></i>
+        Historique
+      </a>
+
+      <a href="dash.html#support">
+        <i class="fa-solid fa-headset"></i>
+        Support
+      </a>
+
+    </nav>
+
+    <div class="logout">
+
+      <button
+        id="logoutButton"
+        type="button"
+      >
+        <i class="fa-solid fa-right-from-bracket"></i>
+        Déconnexion
+      </button>
+
+    </div>
+
+  </aside>
+
+
+  <!-- ==================================================
+       MAIN
+  ================================================== -->
+
+  <main class="main">
+
+    <header class="topbar">
+
+      <div class="topbar-left">
+
+        <button
+          class="menu-toggle"
+          id="menuToggle"
+          type="button"
+          aria-label="Ouvrir le menu"
+        >
+          <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <h1>
+          Investissement
+        </h1>
+
+      </div>
+
+      <div class="top-actions">
+
+        <div class="notification">
+          <i class="fa-regular fa-bell"></i>
+        </div>
+
+      </div>
+
+    </header>
+
+
+    <section class="content">
+
+      <!-- ==================================================
+           SOLDE
+      ================================================== -->
+
+      <div class="balance-card">
+
+        <div>
+
+          <small>
+            Solde disponible
+          </small>
+
+          <h2 id="balance">
+            0 FC
+          </h2>
+
+        </div>
+
+        <i class="fa-solid fa-wallet"></i>
+
+      </div>
+
+
+      <!-- ==================================================
+           TITRE
+      ================================================== -->
+
+      <div class="section-title">
+
+        <h2>
+          Tableau des investissements
+        </h2>
+
+        <p>
+          Sélectionnez un montant pour continuer vers le dépôt.
+        </p>
+
+      </div>
+
+
+      <!-- ==================================================
+           TABLEAU
+      ================================================== -->
+
+      <div class="investment-table-box">
+
+        <div class="table-title">
+
+          <h3>
+            <i class="fa-solid fa-chart-line"></i>
+            Plans d'investissement
+          </h3>
+
+          <p>
+            Durée indicative : 30 jours.
+          </p>
+
+        </div>
+
+        <div class="table-scroll">
+
+          <table class="investment-table">
+
+            <thead>
+
+              <tr>
+                <th>#</th>
+                <th>Capital</th>
+                <th>Durée</th>
+                <th>Gain estimatif / jour</th>
+                <th>Gain estimatif / mois</th>
+                <th>Capital + gain</th>
+                <th>Action</th>
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              <tr>
+                <td class="number">01</td>
+                <td class="capital">20 000 FC</td>
+                <td class="duration">30 jours</td>
+                <td class="gain">1 500 FC</td>
+                <td class="gain">45 000 FC</td>
+                <td class="total">65 000 FC</td>
+                <td>
+                  <button
+                    class="invest-btn"
+                    type="button"
+                    data-plan="20000"
+                    data-amount="20000"
+                  >
+                    Investir
+                  </button>
+                </td>
+              </tr>
+
+
+              <tr>
+                <td class="number">02</td>
+                <td class="capital">50 000 FC</td>
+                <td class="duration">30 jours</td>
+                <td class="gain">4 000 FC</td>
+                <td class="gain">120 000 FC</td>
+                <td class="total">170 000 FC</td>
+                <td>
+                  <button
+                    class="invest-btn"
+                    type="button"
+                    data-plan="50000"
+                    data-amount="50000"
+                  >
+                    Investir
+                  </button>
+                </td>
+              </tr>
+
+
+              <tr>
+                <td class="number">03</td>
+                <td class="capital">100 000 FC</td>
+                <td class="duration">30 jours</td>
+                <td class="gain">8 000 FC</td>
+                <td class="gain">240 000 FC</td>
+                <td class="total">340 000 FC</td>
+                <td>
+                  <button
+                    class="invest-btn"
+                    type="button"
+                    data-plan="100000"
+                    data-amount="100000"
+                  >
+                    Investir
+                  </button>
+                </td>
+              </tr>
+
+
+              <tr>
+                <td class="number">04</td>
+                <td class="capital">300 000 FC</td>
+                <td class="duration">30 jours</td>
+                <td class="gain">24 000 FC</td>
+                <td class="gain">720 000 FC</td>
+                <td class="total">1 020 000 FC</td>
+                <td>
+                  <button
+                    class="invest-btn"
+                    type="button"
+                    data-plan="300000"
+                    data-amount="300000"
+                  >
+                    Investir
+                  </button>
+                </td>
+              </tr>
+
+
+              <tr>
+                <td class="number">05</td>
+                <td class="capital">500 000 FC</td>
+                <td class="duration">30 jours</td>
+                <td class="gain">40 000 FC</td>
+                <td class="gain">1 200 000 FC</td>
+                <td class="total">1 700 000 FC</td>
+                <td>
+                  <button
+                    class="invest-btn"
+                    type="button"
+                    data-plan="500000"
+                    data-amount="500000"
+                  >
+                    Investir
+                  </button>
+                </td>
+              </tr>
+
+
+              <tr>
+                <td class="number">06</td>
+                <td class="capital">1 000 000 FC</td>
+                <td class="duration">30 jours</td>
+                <td class="gain">80 000 FC</td>
+                <td class="gain">2 400 000 FC</td>
+                <td class="total">3 400 000 FC</td>
+                <td>
+                  <button
+                    class="invest-btn"
+                    type="button"
+                    data-plan="1000000"
+                    data-amount="1000000"
+                  >
+                    Investir
+                  </button>
+                </td>
+              </tr>
+
+
+              <tr>
+                <td class="number">07</td>
+                <td class="capital">2 000 000 FC</td>
+                <td class="duration">30 jours</td>
+                <td class="gain">160 000 FC</td>
+                <td class="gain">4 800 000 FC</td>
+                <td class="total">6 800 000 FC</td>
+                <td>
+                  <button
+                    class="invest-btn"
+                    type="button"
+                    data-plan="2000000"
+                    data-amount="2000000"
+                  >
+                    Investir
+                  </button>
+                </td>
+              </tr>
+
+
+              <tr>
+                <td class="number">08</td>
+                <td class="capital">3 000 000 FC</td>
+                <td class="duration">30 jours</td>
+                <td class="gain">240 000 FC</td>
+                <td class="gain">7 200 000 FC</td>
+                <td class="total">10 200 000 FC</td>
+                <td>
+                  <button
+                    class="invest-btn"
+                    type="button"
+                    data-plan="3000000"
+                    data-amount="3000000"
+                  >
+                    Investir
+                  </button>
+                </td>
+              </tr>
+
+
+              <tr>
+                <td class="number">09</td>
+                <td class="capital">5 000 000 FC</td>
+                <td class="duration">30 jours</td>
+                <td class="gain">400 000 FC</td>
+                <td class="gain">12 000 000 FC</td>
+                <td class="total">17 000 000 FC</td>
+                <td>
+                  <button
+                    class="invest-btn"
+                    type="button"
+                    data-plan="5000000"
+                    data-amount="5000000"
+                  >
+                    Investir
+                  </button>
+                </td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+
+      <!-- ==================================================
+           INVESTISSEMENT PERSONNALISÉ
+      ================================================== -->
+
+      <div class="custom-investment">
+
+        <h3>
+          <i class="fa-solid fa-calculator"></i>
+          Investissement personnalisé
+        </h3>
+
+        <p>
+          Entrez un montant compris entre
+          <strong>20 000 FC</strong> et
+          <strong>5 000 000 FC</strong>.
+        </p>
+
+        <div class="custom-form">
+
+          <input
+            type="number"
+            id="customAmount"
+            min="20000"
+            max="5000000"
+            step="1000"
+            placeholder="Exemple : 750000"
+          >
+
+          <button
+            id="customInvestButton"
+            type="button"
+          >
+            <i class="fa-solid fa-arrow-right"></i>
+            Continuer vers le dépôt
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- MESSAGE -->
+
+      <div
+        class="message"
+        id="investmentMessage"
+      ></div>
+
+
+      <!-- ==================================================
+           AVERTISSEMENT
+      ================================================== -->
+
+      <div class="warning">
+
+        <i class="fa-solid fa-triangle-exclamation"></i>
+
+        Les montants affichés sont des
+        <strong>estimations illustratives</strong>.
+        Ils ne constituent pas une garantie de rendement.
+        Toute opération réelle doit être validée par le serveur
+        avant modification du solde.
+
+      </div>
+
+
+      <!-- ==================================================
+           HISTORIQUE
+      ================================================== -->
+
+      <div class="history">
+
+        <div class="history-header">
+
+          <h2>
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            Mes investissements
+          </h2>
+
+        </div>
+
+        <div
+          class="history-empty"
+          id="investmentHistory"
+        >
+
+          <i class="fa-solid fa-folder-open"></i>
+
+          Aucun investissement enregistré.
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- ==================================================
+       JAVASCRIPT
+  ================================================== -->
+
+  <script src="app.js"></script>
+  <script src="investissement.js"></script>
+
+</body>
+</html>

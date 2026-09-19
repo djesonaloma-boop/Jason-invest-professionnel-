@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>JASON INVEST — Administration</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #07111f;
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    /* =========================
+       SIDEBAR
+    ========================= */
+
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 250px;
+      height: 100vh;
+      background: #0b1728;
+      border-right: 1px solid rgba(255,255,255,.08);
+      padding: 22px 15px;
+      z-index: 1000;
+      overflow-y: auto;
+      transition: .25s;
+    }
+
+    .logo {
+      padding: 10px 12px 25px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      margin-bottom: 20px;
+    }
+
+    .logo h1 {
+      color: #f5c542;
+      font-size: 22px;
+    }
+
+    .logo p {
+      color: #8fa0b7;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .admin-badge {
+      display: inline-block;
+      margin-top: 10px;
+      background: rgba(245,197,66,.12);
+      color: #f5c542;
+      border: 1px solid rgba(245,197,66,.25);
+      padding: 5px 9px;
+      border-radius: 20px;
+      font-size: 11px;
+    }
+
+    .menu-title {
+      color: #64748b;
+      font-size: 11px;
+      text-transform: uppercase;
+      margin: 20px 10px 8px;
+    }
+
+    .nav-btn {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: #b9c5d6;
+      padding: 13px 12px;
+      border-radius: 10px;
+      text-align: left;
+      margin-bottom: 5px;
+      transition: .2s;
+    }
+
+    .nav-btn:hover,
+    .nav-btn.active {
+      background: rgba(245,197,66,.10);
+      color: #f5c542;
+    }
+
+    .logout-btn {
+      color: #ff7b7b;
+    }
+
+    .logout-btn:hover {
+      background: rgba(239,68,68,.10);
+      color: #ff8c8c;
+    }
+
+    /* =========================
+       MAIN
+    ========================= */
+
+    .main {
+      margin-left: 250px;
+      padding: 25px;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .topbar h2 {
+      font-size: 25px;
+    }
+
+    .topbar p {
+      color: #8fa0b7;
+      font-size: 13px;
+      margin-top: 5px;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .refresh-btn {
+      border: 1px solid rgba(245,197,66,.3);
+      background: rgba(245,197,66,.08);
+      color: #f5c542;
+      padding: 11px 15px;
+      border-radius: 9px;
+    }
+
+    .refresh-btn:hover {
+      background: rgba(245,197,66,.15);
+    }
+
+    /* =========================
+       MOBILE MENU
+    ========================= */
+
+    .mobile-menu {
+      display: none;
+      position: relative;
+      z-index: 1101;
+      border: 0;
+      background: #0e1d31;
+      color: #fff;
+      padding: 10px 13px;
+      border-radius: 9px;
+      font-size: 20px;
+      cursor: pointer;
+      pointer-events: auto;
+    }
+
+    /* =========================
+       MESSAGE
+    ========================= */
+
+    .message {
+      display: none;
+      padding: 13px 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+
+    .message.show {
+      display: block;
+    }
+
+    .message.error {
+      background: rgba(239,68,68,.12);
+      border: 1px solid rgba(239,68,68,.25);
+      color: #ff9b9b;
+    }
+
+    .message.success {
+      background: rgba(34,197,94,.12);
+      border: 1px solid rgba(34,197,94,.25);
+      color: #7ee2a0;
+    }
+
+    /* =========================
+       STATS
+    ========================= */
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .stat-card {
+      background: #0c192b;
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 15px;
+      padding: 20px;
+    }
+
+    .stat-icon {
+      font-size: 24px;
+      margin-bottom: 12px;
+    }
+
+    .stat-label {
+      color: #8fa0b7;
+      font-size: 12px;
+      margin-bottom: 7px;
+    }
+
+    .stat-value {
+      font-size: 23px;
+      font-weight: bold;
+      color: #fff;
+      word-break: break-word;
+    }
+
+    .stat-card.gold .stat-value {
+      color: #f5c542;
+    }
+
+    /* =========================
+       SECTIONS
+    ========================= */
+
+    .section {
+      display: none;
+      background: #0c192b;
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 18px;
+    }
+
+    .section-header h3 {
+      font-size: 18px;
+    }
+
+    .section-header p {
+      color: #7f91a8;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    /* =========================
+       SEARCH
+    ========================= */
+
+    .search-box {
+      width: 100%;
+      max-width: 400px;
+      background: #07111f;
+      color: #fff;
+      border: 1px solid rgba(255,255,255,.1);
+      padding: 12px 14px;
+      border-radius: 9px;
+      outline: none;
+    }
+
+    .search-box:focus {
+      border-color: #f5c542;
+    }
+
+    /* =========================
+       TABLE
+    ========================= */
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 750px;
+    }
+
+    th {
+      color: #788ba4;
+      font-size: 11px;
+      text-transform: uppercase;
+      text-align: left;
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    td {
+      padding: 14px 12px;
+      border-bottom: 1px solid rgba(255,255,255,.05);
+      font-size: 13px;
+      color: #d6deea;
+    }
+
+    tr:hover td {
+      background: rgba(255,255,255,.02);
+    }
+
+    .status {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 20px;
+      font-size: 11px;
+    }
+
+    .status.active {
+      color: #72e69a;
+      background: rgba(34,197,94,.10);
+    }
+
+    .status.pending {
+      color: #f5c542;
+      background: rgba(245,197,66,.10);
+    }
+
+    .status.blocked,
+    .status.rejected {
+      color: #ff8c8c;
+      background: rgba(239,68,68,.10);
+    }
+
+    .status.approved,
+    .status.completed {
+      color: #72e69a;
+      background: rgba(34,197,94,.10);
+    }
+
+    /* =========================
+       ACTION BUTTONS
+    ========================= */
+
+    .action-btn {
+      border: 0;
+      padding: 7px 10px;
+      border-radius: 7px;
+      font-size: 11px;
+      margin: 2px;
+    }
+
+    .approve {
+      background: rgba(34,197,94,.12);
+      color: #72e69a;
+    }
+
+    .reject {
+      background: rgba(239,68,68,.12);
+      color: #ff8c8c;
+    }
+
+    .gold-btn {
+      background: #f5c542;
+      color: #111827;
+    }
+
+    .gold-btn:hover {
+      background: #ffd45d;
+    }
+
+    /* =========================
+       EMPTY / LOADING
+    ========================= */
+
+    .empty {
+      text-align: center;
+      padding: 40px 15px;
+      color: #71839b;
+      font-size: 14px;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 25px;
+      color: #8fa0b7;
+    }
+
+    /* =========================
+       ASSISTANT
+    ========================= */
+
+    .assistant-box {
+      background: #07111f;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 15px;
+      overflow: hidden;
+    }
+
+    .assistant-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      background: #0e1d31;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    .assistant-avatar {
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: rgba(245,197,66,.12);
+      border: 1px solid rgba(245,197,66,.25);
+      font-size: 21px;
+    }
+
+    .assistant-header strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .assistant-status {
+      display: block;
+      margin-top: 4px;
+      color: #72e69a;
+      font-size: 11px;
+    }
+
+    .assistant-messages {
+      height: 400px;
+      overflow-y: auto;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .assistant-message {
+      max-width: 88%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-size: 13px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .assistant-message.bot {
+      align-self: flex-start;
+      background: #0e1d31;
+      color: #dce5f0;
+      border: 1px solid rgba(255,255,255,.07);
+    }
+
+    .assistant-message.user {
+      align-self: flex-end;
+      background: rgba(245,197,66,.14);
+      color: #fff;
+      border: 1px solid rgba(245,197,66,.2);
+    }
+
+    /* =========================
+       OVERLAY
+    ========================= */
+
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.6);
+      z-index: 900;
+    }
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media (max-width: 1100px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 750px) {
+
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .overlay.show {
+        display: block;
+      }
+
+      .main {
+        margin-left: 0;
+        padding: 15px;
+      }
+
+      .mobile-menu {
+        display: block;
+      }
+
+      .topbar {
+        align-items: flex-start;
+      }
+
+      .topbar h2 {
+        font-size: 20px;
+      }
+
+      .stats {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .stat-card {
+        padding: 15px;
+      }
+
+      .stat-value {
+        font-size: 18px;
+      }
+
+      .section-header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .search-box {
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 450px) {
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .top-actions .refresh-btn {
+        font-size: 11px;
+        padding: 9px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="overlay" id="overlay"></div>
+
+  <!-- SIDEBAR -->
+
+  <aside class="sidebar" id="sidebar">
+
+    <div class="logo">
+      <h1>JASON INVEST</h1>
+      <p>Panneau d'administration</p>
+      <span class="admin-badge">ADMINISTRATEUR</span>
+    </div>
+
+    <div class="menu-title">
+      Administration
+    </div>
+
+    <button
+      class="nav-btn active"
+      data-section="dashboard"
+      type="button"
+    >
+      📊 Tableau de bord
+    </button>
+
+    <button
+      class="nav-btn"
+      data-section="clients"
+      type="button"
+    >
+      👥 Clients
+    </button>
+
+    <button
+      class="nav-btn"
+      data-section="deposits"
+      type="button"
+    >
+      💰 Dépôts
+    </button>
+
+    <button
+      class="nav-btn"
+      data-section="withdrawals"
+      type="button"
+    >
+      💸 Retraits
+    </button>
+
+    <button
+      class="nav-btn"
+      data-section="investments"
+      type="button"
+    >
+      📈 Investissements
+    </button>
+
+    <button
+      class="nav-btn"
+      data-section="vip"
+      type="button"
+    >
+      👑 VIP
+    </button>
+
+    <button
+      class="nav-btn"
+      data-section="transactions"
+      type="button"
+    >
+      🧾 Transactions
+    </button>
+
+    <button
+      class="nav-btn"
+      data-section="notifications"
+      type="button"
+    >
+      🔔 Notifications
+    </button>
+
+    <!-- ASSISTANT IA -->
+
+    <button
+      class="nav-btn"
+      id="assistantMenuButton"
+      data-section="assistant"
+      type="button"
+    >
+      🤖 Assistant IA
+    </button>
+
+    <div class="menu-title">
+      Compte
+    </div>
+
+    <button
+      class="nav-btn logout-btn"
+      id="logoutButton"
+      type="button"
+    >
+      🚪 Déconnexion
+    </button>
+
+  </aside>
+
+
+  <!-- MAIN -->
+
+  <main class="main">
+
+    <div class="topbar">
+
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+
+        <button
+          class="mobile-menu"
+          id="mobileMenu"
+          type="button"
+          aria-label="Ouvrir le menu"
+        >
+          ☰
+        </button>
+
+        <div>
+          <h2>Administration</h2>
+
+          <p id="adminWelcome">
+            Chargement du compte administrateur...
+          </p>
+        </div>
+
+      </div>
+
+      <div class="top-actions">
+
+        <button
+          class="refresh-btn"
+          id="refreshButton"
+          type="button"
+        >
+          ↻ Actualiser
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div
+      class="message"
+      id="globalMessage"
+    ></div>
+
+
+    <!-- DASHBOARD -->
+
+    <section
+      class="section active"
+      id="section-dashboard"
+    >
+
+      <div class="section-header">
+
+        <div>
+          <h3>Vue générale</h3>
+          <p>
+            Statistiques réelles de la plateforme
+          </p>
+        </div>
+
+      </div>
+
+
+      <div class="stats">
+
+        <div class="stat-card gold">
+          <div class="stat-icon">👥</div>
+          <div class="stat-label">
+            Nombre total de clients
+          </div>
+          <div class="stat-value" id="totalClients">
+            —
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">🟢</div>
+          <div class="stat-label">
+            Clients actifs
+          </div>
+          <div class="stat-value" id="activeClients">
+            —
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">💰</div>
+          <div class="stat-label">
+            Total des dépôts
+          </div>
+          <div class="stat-value" id="totalDeposits">
+            —
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">💸</div>
+          <div class="stat-label">
+            Total des retraits
+          </div>
+          <div class="stat-value" id="totalWithdrawals">
+            —
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">📈</div>
+          <div class="stat-label">
+            Total investi
+          </div>
+          <div class="stat-value" id="totalInvestments">
+            —
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">👑</div>
+          <div class="stat-label">
+            Abonnés VIP
+          </div>
+          <div class="stat-value" id="totalVip">
+            —
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">💳</div>
+          <div class="stat-label">
+            Solde total clients
+          </div>
+          <div class="stat-value" id="totalBalance">
+            —
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">⏳</div>
+          <div class="stat-label">
+            Demandes en attente
+          </div>
+          <div class="stat-value" id="pendingRequests">
+            —
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- CLIENTS -->
+
+    <section
+      class="section"
+      id="section-clients"
+    >
+
+      <div class="section-header">
+
+        <div>
+          <h3>Clients</h3>
+          <p>Liste des comptes clients</p>
+        </div>
+
+        <input
+          type="search"
+          class="search-box"
+          id="clientSearch"
+          placeholder="Rechercher nom, téléphone ou Gmail..."
+          autocomplete="off"
+        >
+
+      </div>
+
+      <div id="clientsContainer">
+        <div class="loading">
+          Chargement des clients...
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- DEPOTS -->
+
+    <section
+      class="section"
+      id="section-deposits"
+    >
+
+      <div class="section-header">
+
+        <div>
+          <h3>Dépôts</h3>
+          <p>Demandes de dépôt des clients</p>
+        </div>
+
+      </div>
+
+      <div id="depositsContainer">
+        <div class="loading">
+          Chargement des dépôts...
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- RETRAITS -->
+
+    <section
+      class="section"
+      id="section-withdrawals"
+    >
+
+      <div class="section-header">
+
+        <div>
+          <h3>Retraits</h3>
+          <p>Demandes de retrait des clients</p>
+        </div>
+
+      </div>
+
+      <div id="withdrawalsContainer">
+        <div class="loading">
+          Chargement des retraits...
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- INVESTISSEMENTS -->
+
+    <section
+      class="section"
+      id="section-investments"
+    >
+
+      <div class="section-header">
+
+        <div>
+          <h3>Investissements</h3>
+          <p>Investissements enregistrés</p>
+        </div>
+
+      </div>
+
+      <div id="investmentsContainer">
+        <div class="loading">
+          Chargement des investissements...
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- VIP -->
+
+    <section
+      class="section"
+      id="section-vip"
+    >
+
+      <div class="section-header">
+
+        <div>
+          <h3>Abonnements VIP</h3>
+          <p>Gestion des abonnements VIP</p>
+        </div>
+
+      </div>
+
+      <div id="vipContainer">
+        <div class="loading">
+          Chargement des abonnements VIP...
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- TRANSACTIONS -->
+
+    <section
+      class="section"
+      id="section-transactions"
+    >
+
+      <div class="section-header">
+
+        <div>
+          <h3>Transactions</h3>
+          <p>Historique global de la plateforme</p>
+        </div>
+
+      </div>
+
+      <div id="transactionsContainer">
+        <div class="loading">
+          Chargement des transactions...
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- NOTIFICATIONS -->
+
+    <section
+      class="section"
+      id="section-notifications"
+    >
+
+      <div class="section-header">
+
+        <div>
+          <h3>Notifications</h3>
+          <p>Envoyer une notification aux clients</p>
+        </div>
+
+      </div>
+
+      <div
+        style="
+          display:grid;
+          gap:12px;
+          max-width:600px;
+        "
+      >
+
+        <input
+          id="notificationTitle"
+          class="search-box"
+          placeholder="Titre de la notification"
+        >
+
+        <textarea
+          id="notificationMessage"
+          class="search-box"
+          placeholder="Message..."
+          rows="5"
+          style="resize:vertical;"
+        ></textarea>
+
+        <button
+          class="gold-btn"
+          id="sendNotificationButton"
+          type="button"
+          style="
+            border:0;
+            padding:12px;
+            border-radius:9px;
+          "
+        >
+          Envoyer la notification
+        </button>
+
+      </div>
+
+      <div
+        id="notificationsContainer"
+        style="margin-top:25px;"
+      >
+
+        <div class="loading">
+          Chargement des notifications...
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- ADMIN JS -->
+
+  <script src="app.js"></script>
+  <script src="admin.js"></script>
+
+</body>
+</html>

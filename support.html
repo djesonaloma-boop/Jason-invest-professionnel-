@@ -1,0 +1,534 @@
+m<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Support - JASON INVEST</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #06101d;
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 1100px;
+      margin: auto;
+      padding: 18px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      gap: 15px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #1769ff, #00a8ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+    }
+
+    .brand h1 {
+      font-size: 20px;
+    }
+
+    .brand p {
+      color: #8296ae;
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    .back {
+      color: #fff;
+      text-decoration: none;
+      background: #102238;
+      border: 1px solid #1b3855;
+      padding: 11px 15px;
+      border-radius: 12px;
+      font-size: 14px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 18px;
+    }
+
+    .card {
+      background: #0a192a;
+      border: 1px solid #17314e;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    /* SUPPORT */
+
+    .support-info {
+      padding: 24px;
+    }
+
+    .support-icon {
+      width: 65px;
+      height: 65px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #1769ff, #694dff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 29px;
+      margin-bottom: 18px;
+    }
+
+    .support-info h2 {
+      font-size: 21px;
+      margin-bottom: 10px;
+    }
+
+    .support-info > p {
+      color: #91a4ba;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .topics {
+      display: grid;
+      gap: 9px;
+      margin-top: 22px;
+    }
+
+    .topic {
+      background: #0f2135;
+      border: 1px solid #193853;
+      border-radius: 12px;
+      padding: 12px;
+      color: #c5d2df;
+      font-size: 13px;
+    }
+
+    .whatsapp {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 22px;
+      padding: 15px;
+      border-radius: 14px;
+      background: #0c2922;
+      border: 1px solid #18533f;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .whatsapp-icon {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: #25d366;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+
+    .whatsapp strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .whatsapp small {
+      display: block;
+      color: #9bb9aa;
+      margin-top: 4px;
+    }
+
+    /* CHAT */
+
+    .chat {
+      height: 700px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-header {
+      padding: 17px 20px;
+      border-bottom: 1px solid #17314e;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .bot-avatar {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #1769ff, #694dff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+
+    .chat-header h2 {
+      font-size: 16px;
+    }
+
+    .status {
+      color: #4be28b;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+    }
+
+    .message {
+      max-width: 82%;
+      padding: 12px 14px;
+      border-radius: 16px;
+      font-size: 14px;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .bot-message {
+      align-self: flex-start;
+      background: #12253a;
+      color: #dce8f4;
+      border-bottom-left-radius: 5px;
+    }
+
+    .user-message {
+      align-self: flex-end;
+      background: #1769ff;
+      color: #fff;
+      border-bottom-right-radius: 5px;
+    }
+
+    .typing {
+      opacity: .65;
+      font-style: italic;
+    }
+
+    /* QUICK */
+
+    .quick {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 0 18px 12px;
+    }
+
+    .quick button {
+      flex-shrink: 0;
+      background: #0e2034;
+      border: 1px solid #24415d;
+      color: #c7d5e4;
+      border-radius: 20px;
+      padding: 9px 12px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .quick button:hover {
+      background: #173858;
+    }
+
+    /* INPUT */
+
+    .input-area {
+      padding: 15px;
+      border-top: 1px solid #17314e;
+      display: flex;
+      gap: 10px;
+    }
+
+    .input-area input {
+      flex: 1;
+      min-width: 0;
+      background: #071524;
+      border: 1px solid #24415d;
+      color: #fff;
+      border-radius: 13px;
+      padding: 13px;
+      outline: none;
+      font-size: 14px;
+    }
+
+    .input-area input:focus {
+      border-color: #287cff;
+    }
+
+    .send {
+      width: 50px;
+      border: 0;
+      border-radius: 13px;
+      background: #1769ff;
+      color: #fff;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .send:hover {
+      background: #2d7fff;
+    }
+
+    .send:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 800px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .chat {
+        height: 650px;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .page {
+        padding: 12px;
+      }
+
+      .brand h1 {
+        font-size: 17px;
+      }
+
+      .message {
+        max-width: 90%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page">
+
+    <div class="topbar">
+
+      <div class="brand">
+        <div class="logo">JI</div>
+
+        <div>
+          <h1>JASON INVEST</h1>
+          <p>Support client</p>
+        </div>
+      </div>
+
+      <a href="dash.html" class="back">
+        ← Retour
+      </a>
+
+    </div>
+
+
+    <div class="layout">
+
+      <!-- INFORMATIONS -->
+
+      <div class="card">
+
+        <div class="support-info">
+
+          <div class="support-icon">
+            🤖
+          </div>
+
+          <h2>Centre d'aide</h2>
+
+          <p>
+            L'assistant IA peut vous accompagner
+            dans l'utilisation de la plateforme
+            JASON INVEST.
+          </p>
+
+
+          <div class="topics">
+
+            <div class="topic">
+              💰 Dépôts et paiements
+            </div>
+
+            <div class="topic">
+              💸 Retraits
+            </div>
+
+            <div class="topic">
+              📈 Investissements
+            </div>
+
+            <div class="topic">
+              👑 Abonnements VIP
+            </div>
+
+            <div class="topic">
+              👤 Compte et profil
+            </div>
+
+            <div class="topic">
+              🔐 Sécurité
+            </div>
+
+          </div>
+
+
+          <!-- WHATSAPP -->
+
+          <a
+            class="whatsapp"
+            href="https://wa.me/243847500590"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+
+            <div class="whatsapp-icon">
+              ☎
+            </div>
+
+            <div>
+              <strong>Support WhatsApp</strong>
+              <small>+243 847 500 590</small>
+            </div>
+
+          </a>
+
+        </div>
+
+      </div>
+
+
+      <!-- CHAT -->
+
+      <div class="card chat">
+
+        <div class="chat-header">
+
+          <div class="bot-avatar">
+            🤖
+          </div>
+
+          <div>
+            <h2>Assistant JASON INVEST</h2>
+
+            <div class="status">
+              ● Assistant client
+            </div>
+          </div>
+
+        </div>
+
+
+        <div
+          id="messages"
+          class="messages"
+        ></div>
+
+
+        <div class="quick">
+
+          <button
+            type="button"
+            data-question="Comment effectuer un dépôt sur JASON INVEST ?"
+          >
+            💰 Dépôt
+          </button>
+
+          <button
+            type="button"
+            data-question="Comment effectuer un retrait sur JASON INVEST ?"
+          >
+            💸 Retrait
+          </button>
+
+          <button
+            type="button"
+            data-question="Comment fonctionne l'investissement sur JASON INVEST ?"
+          >
+            📈 Investissement
+          </button>
+
+          <button
+            type="button"
+            data-question="Comment fonctionne le VIP de JASON INVEST ?"
+          >
+            👑 VIP
+          </button>
+
+          <button
+            type="button"
+            data-question="Je veux contacter le support humain."
+          >
+            📞 Support
+          </button>
+
+        </div>
+
+
+        <form
+          id="chatForm"
+          class="input-area"
+        >
+
+          <input
+            id="chatInput"
+            type="text"
+            placeholder="Écrivez votre question..."
+            autocomplete="off"
+            maxlength="1000"
+          >
+
+          <button
+            id="sendButton"
+            class="send"
+            type="submit"
+          >
+            ➤
+          </button>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <script src="app.js"></script>
+  <script src="support.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>JASON INVEST</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      background: #06142b;
+      color: white;
+    }
+
+    header {
+      height: 65px;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #041024;
+      border-bottom: 1px solid #17345d;
+    }
+
+    .logo {
+      color: #f5c542;
+      font-size: 21px;
+      font-weight: bold;
+    }
+
+    .logo span {
+      color: white;
+    }
+
+    .header-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .header-buttons button {
+      border: 1px solid #f5c542;
+      background: transparent;
+      color: white;
+      padding: 9px 12px;
+      border-radius: 7px;
+      font-weight: bold;
+    }
+
+    .header-buttons button:last-child {
+      background: #f5c542;
+      color: #06142b;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 55px 20px 30px;
+    }
+
+    .hero h1 {
+      font-size: 43px;
+      margin-bottom: 15px;
+    }
+
+    .hero h1 span {
+      color: #f5c542;
+    }
+
+    .hero p {
+      color: #aebbd0;
+      line-height: 1.6;
+    }
+
+    .auth {
+      width: 100%;
+      max-width: 500px;
+      margin: 20px auto 60px;
+      padding: 15px;
+    }
+
+    .card {
+      background: #091d3b;
+      border: 1px solid #17345d;
+      border-radius: 18px;
+      padding: 22px;
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      background: #041024;
+      padding: 5px;
+      border-radius: 10px;
+      margin-bottom: 22px;
+    }
+
+    .tab {
+      border: 0;
+      background: transparent;
+      color: #9daac0;
+      padding: 12px;
+      border-radius: 7px;
+      font-weight: bold;
+    }
+
+    .tab.active {
+      background: #f5c542;
+      color: #06142b;
+    }
+
+    .form {
+      display: none;
+    }
+
+    .form.active {
+      display: block;
+    }
+
+    h2 {
+      margin-bottom: 8px;
+    }
+
+    .description {
+      color: #91a0b6;
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    .field {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      height: 49px;
+      padding: 0 13px;
+      border-radius: 9px;
+      border: 1px solid #28466e;
+      background: #041024;
+      color: white;
+      outline: none;
+      font-size: 15px;
+    }
+
+    input:focus {
+      border-color: #f5c542;
+    }
+
+    .password-box {
+      position: relative;
+    }
+
+    .password-box input {
+      padding-right: 50px;
+    }
+
+    .eye {
+      position: absolute;
+      right: 6px;
+      top: 6px;
+      width: 38px;
+      height: 37px;
+      border: 0;
+      background: transparent;
+      color: white;
+      font-size: 17px;
+    }
+
+    .button {
+      width: 100%;
+      height: 51px;
+      border: 0;
+      border-radius: 9px;
+      background: #f5c542;
+      color: #06142b;
+      font-weight: bold;
+      font-size: 15px;
+      margin-top: 5px;
+    }
+
+    .button:disabled {
+      opacity: .6;
+    }
+
+    .forgot {
+      display: block;
+      text-align: right;
+      color: #f5c542;
+      font-size: 13px;
+      margin: 10px 0 16px;
+      cursor: pointer;
+    }
+
+    .back {
+      display: block;
+      text-align: center;
+      color: #f5c542;
+      margin-top: 15px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .message {
+      display: none;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .message.show {
+      display: block;
+    }
+
+    .message.error {
+      background: #35151a;
+      color: #ff9ca7;
+      border: 1px solid #7b2935;
+    }
+
+    .message.success {
+      background: #103526;
+      color: #75e0ad;
+      border: 1px solid #206947;
+    }
+
+    footer {
+      text-align: center;
+      color: #6e7d94;
+      padding: 25px;
+      border-top: 1px solid #17345d;
+      font-size: 13px;
+    }
+
+    @media (max-width: 600px) {
+      .hero h1 {
+        font-size: 38px;
+      }
+
+      header {
+        padding: 0 12px;
+      }
+
+      .logo {
+        font-size: 17px;
+      }
+
+      .header-buttons button {
+        font-size: 11px;
+        padding: 8px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+
+  <div class="logo">
+    JASON<span> INVEST</span>
+  </div>
+
+  <div class="header-buttons">
+
+    <button id="headerLoginBtn" type="button">
+      Connexion
+    </button>
+
+    <button id="headerRegisterBtn" type="button">
+      Inscription
+    </button>
+
+  </div>
+
+</header>
+
+
+<section class="hero">
+
+  <h1>
+    JASON <span>INVEST</span>
+  </h1>
+
+  <p>
+    Créez votre compte et accédez à votre espace personnel.
+  </p>
+
+</section>
+
+
+<section class="auth" id="auth">
+
+  <div class="card">
+
+    <div class="tabs">
+
+      <button
+        type="button"
+        id="loginTab"
+        class="tab active"
+      >
+        Connexion
+      </button>
+
+      <button
+        type="button"
+        id="registerTab"
+        class="tab"
+      >
+        Inscription
+      </button>
+
+    </div>
+
+
+    <div id="authMessage" class="message"></div>
+
+
+    <!-- =========================
+         CONNEXION
+    ========================== -->
+
+    <form id="loginForm" class="form active">
+
+      <h2>Connexion</h2>
+
+      <p class="description">
+        Connectez-vous à votre compte JASON INVEST.
+      </p>
+
+
+      <div class="field">
+
+        <label for="loginEmail">
+          Gmail / E-mail
+        </label>
+
+        <input
+          id="loginEmail"
+          type="email"
+          placeholder="exemple@gmail.com"
+          autocomplete="email"
+          required
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label for="loginPassword">
+          Mot de passe
+        </label>
+
+        <div class="password-box">
+
+          <input
+            id="loginPassword"
+            type="password"
+            placeholder="Votre mot de passe"
+            autocomplete="current-password"
+            required
+          >
+
+          <button
+            type="button"
+            class="eye"
+            data-eye="loginPassword"
+          >
+            👁
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <span
+        id="forgotPasswordLink"
+        class="forgot"
+      >
+        Mot de passe oublié ?
+      </span>
+
+
+      <button
+        id="loginButton"
+        class="button"
+        type="submit"
+      >
+        Se connecter
+      </button>
+
+    </form>
+
+
+    <!-- =========================
+         INSCRIPTION
+    ========================== -->
+
+    <form id="registerForm" class="form">
+
+      <h2>Créer un compte</h2>
+
+      <p class="description">
+        Remplissez les informations pour créer votre compte.
+      </p>
+
+
+      <div class="field">
+
+        <label for="registerName">
+          Nom complet
+        </label>
+
+        <input
+          id="registerName"
+          type="text"
+          placeholder="Ex : Djeson Aloma"
+          autocomplete="name"
+          required
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label for="registerPhone">
+          Numéro de téléphone
+        </label>
+
+        <input
+          id="registerPhone"
+          type="tel"
+          placeholder="+243 8XX XXX XXX"
+          autocomplete="tel"
+          required
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label for="registerEmail">
+          Gmail / E-mail
+        </label>
+
+        <input
+          id="registerEmail"
+          type="email"
+          placeholder="exemple@gmail.com"
+          autocomplete="email"
+          required
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label for="registerPassword">
+          Mot de passe
+        </label>
+
+        <div class="password-box">
+
+          <input
+            id="registerPassword"
+            type="password"
+            placeholder="Minimum 8 caractères"
+            autocomplete="new-password"
+            required
+          >
+
+          <button
+            type="button"
+            class="eye"
+            data-eye="registerPassword"
+          >
+            👁
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <div class="field">
+
+        <label for="registerPasswordConfirm">
+          Confirmation du mot de passe
+        </label>
+
+        <div class="password-box">
+
+          <input
+            id="registerPasswordConfirm"
+            type="password"
+            placeholder="Retapez le mot de passe"
+            autocomplete="new-password"
+            required
+          >
+
+          <button
+            type="button"
+            class="eye"
+            data-eye="registerPasswordConfirm"
+          >
+            👁
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <div class="field">
+
+        <label for="registerReferral">
+          Code de parrainage
+          <small>(facultatif)</small>
+        </label>
+
+        <input
+          id="registerReferral"
+          type="text"
+          placeholder="Ex : JASON-12345"
+        >
+
+      </div>
+
+
+      <button
+        id="registerButton"
+        class="button"
+        type="submit"
+      >
+        Créer mon compte
+      </button>
+
+    </form>
+
+
+    <!-- =========================
+         MOT DE PASSE OUBLIÉ
+    ========================== -->
+
+    <form
+      id="forgotPasswordForm"
+      class="form"
+    >
+
+      <h2>Mot de passe oublié</h2>
+
+      <p class="description">
+        Entrez votre Gmail/e-mail pour demander
+        la récupération de votre compte.
+      </p>
+
+
+      <div class="field">
+
+        <label for="forgotEmail">
+          Gmail / E-mail
+        </label>
+
+        <input
+          id="forgotEmail"
+          type="email"
+          placeholder="exemple@gmail.com"
+          autocomplete="email"
+          required
+        >
+
+      </div>
+
+
+      <button
+        id="forgotPasswordButton"
+        class="button"
+        type="submit"
+      >
+        Réinitialiser le mot de passe
+      </button>
+
+
+      <span
+        id="backToLogin"
+        class="back"
+      >
+        ← Retour à la connexion
+      </span>
+
+    </form>
+
+  </div>
+
+</section>
+
+
+<footer>
+  © 2026 JASON INVEST — Tous droits réservés.
+</footer>
+
+
+<script src="app.js"></script>
+  <script src="index.js"></script>
+
+</body>
+</html>

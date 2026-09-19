@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>JASON INVEST — Assistant IA</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #07111f;
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    .page {
+      max-width: 900px;
+      margin: auto;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      padding: 20px;
+      background: #0b1728;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    .header h1 {
+      color: #f5c542;
+      font-size: 21px;
+    }
+
+    .header p {
+      color: #8fa0b7;
+      font-size: 12px;
+      margin-top: 6px;
+    }
+
+    .chat {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .message {
+      max-width: 85%;
+      padding: 13px 15px;
+      margin-bottom: 12px;
+      border-radius: 13px;
+      line-height: 1.5;
+      font-size: 14px;
+      white-space: pre-wrap;
+    }
+
+    .assistant {
+      background: #0c192b;
+      border: 1px solid rgba(255,255,255,.07);
+      color: #dce5f1;
+    }
+
+    .user {
+      margin-left: auto;
+      background: rgba(245,197,66,.12);
+      border: 1px solid rgba(245,197,66,.2);
+    }
+
+    .name {
+      display: block;
+      color: #f5c542;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .suggestions {
+      padding: 10px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .suggestion {
+      border: 1px solid rgba(255,255,255,.1);
+      background: #0c192b;
+      color: #cbd5e1;
+      border-radius: 20px;
+      padding: 9px 12px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .suggestion:hover {
+      color: #f5c542;
+      border-color: #f5c542;
+    }
+
+    .input-area {
+      padding: 15px 20px 20px;
+      display: flex;
+      gap: 10px;
+      background: #07111f;
+      border-top: 1px solid rgba(255,255,255,.07);
+    }
+
+    #messageInput {
+      flex: 1;
+      min-width: 0;
+      padding: 13px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,.1);
+      outline: none;
+      background: #0c192b;
+      color: #fff;
+    }
+
+    #messageInput:focus {
+      border-color: #f5c542;
+    }
+
+    #sendButton {
+      border: 0;
+      border-radius: 10px;
+      padding: 0 18px;
+      background: #f5c542;
+      color: #111827;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #sendButton:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
+    .back {
+      display: inline-block;
+      margin-top: 12px;
+      color: #8fa0b7;
+      text-decoration: none;
+      font-size: 12px;
+    }
+
+    .back:hover {
+      color: #f5c542;
+    }
+
+    @media (max-width: 600px) {
+      .chat {
+        padding: 15px;
+      }
+
+      .input-area {
+        padding: 12px;
+      }
+
+      #sendButton {
+        padding: 0 13px;
+      }
+
+      .message {
+        max-width: 92%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page">
+
+    <header class="header">
+      <h1>🤖 Mon Assistant IA</h1>
+      <p>Assistant administratif — JASON INVEST</p>
+
+      <a href="admin.html" class="back">
+        ← Retour à l'administration
+      </a>
+    </header>
+
+    <main class="chat" id="chat">
+
+      <div class="message assistant">
+        <span class="name">🤖 Assistant JASON INVEST</span>
+
+        Bonjour Administrateur 👋
+
+        Je peux vous aider à consulter les informations de la plateforme.
+
+        Exemples :
+        • Combien avons-nous de clients ?
+        • Combien de clients sont actifs ?
+        • Combien avons-nous de dépôts ?
+        • Combien de retraits sont en attente ?
+        • Combien de clients ont un VIP ?
+      </div>
+
+    </main>
+
+    <div class="suggestions">
+
+      <button class="suggestion"
+        data-question="Combien avons-nous de clients ?">
+        👥 Nombre de clients
+      </button>
+
+      <button class="suggestion"
+        data-question="Combien de clients sont actifs ?">
+        🟢 Clients actifs
+      </button>
+
+      <button class="suggestion"
+        data-question="Combien avons-nous de dépôts ?">
+        💰 Dépôts
+      </button>
+
+      <button class="suggestion"
+        data-question="Combien de retraits sont en attente ?">
+        💸 Retraits
+      </button>
+
+      <button class="suggestion"
+        data-question="Combien de clients ont un VIP ?">
+        👑 VIP
+      </button>
+
+    </div>
+
+    <form class="input-area" id="chatForm">
+
+      <input
+        id="messageInput"
+        type="text"
+        placeholder="Écris ta question..."
+        autocomplete="off"
+        required
+      >
+
+      <button id="sendButton" type="submit">
+        Envoyer
+      </button>
+
+    </form>
+
+  </div>
+
+  <script src="app.js"></script>
+  <script src="admin-assistant.js"></script>
+
+</body>
+</html>

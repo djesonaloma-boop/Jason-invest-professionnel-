@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Notifications - JASON INVEST</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #07111f;
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      height: 70px;
+      background: #0b1728;
+      border-bottom: 1px solid #1b2b42;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+    }
+
+    .menu-btn {
+      width: 42px;
+      height: 42px;
+      border: 0;
+      border-radius: 10px;
+      background: #13243a;
+      color: #fff;
+      font-size: 22px;
+      cursor: pointer;
+      margin-right: 15px;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .logo span {
+      color: #2d8cff;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 70px;
+      left: 0;
+      bottom: 0;
+      width: 260px;
+      background: #0b1728;
+      border-right: 1px solid #1b2b42;
+      padding: 20px 14px;
+      z-index: 999;
+      transition: .3s;
+    }
+
+    .sidebar-user {
+      background: #101f34;
+      border-radius: 14px;
+      padding: 15px;
+      margin-bottom: 18px;
+    }
+
+    .sidebar-user strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .sidebar-user small {
+      color: #8ea2bc;
+      word-break: break-word;
+    }
+
+    .nav {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .nav a {
+      text-decoration: none;
+      color: #aebed2;
+      padding: 13px 14px;
+      border-radius: 10px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .nav a:hover,
+    .nav a.active {
+      background: #142943;
+      color: #fff;
+    }
+
+    .main {
+      margin-left: 260px;
+      padding: 100px 25px 30px;
+    }
+
+    .page-title {
+      margin-bottom: 25px;
+    }
+
+    .page-title h1 {
+      font-size: 28px;
+      margin-bottom: 7px;
+    }
+
+    .page-title p {
+      color: #8ea2bc;
+    }
+
+    .notification-card {
+      background: #0b1728;
+      border: 1px solid #1b2b42;
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 15px;
+    }
+
+    .notification {
+      padding: 20px;
+      border-bottom: 1px solid #17273c;
+      display: flex;
+      gap: 15px;
+      position: relative;
+    }
+
+    .notification:last-child {
+      border-bottom: 0;
+    }
+
+    .notification.unread {
+      background: #0e1d31;
+    }
+
+    .notification-icon {
+      width: 45px;
+      height: 45px;
+      min-width: 45px;
+      border-radius: 50%;
+      background: #142943;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 20px;
+    }
+
+    .notification-content {
+      flex: 1;
+    }
+
+    .notification-content h3 {
+      font-size: 16px;
+      margin-bottom: 7px;
+    }
+
+    .notification-content p {
+      color: #9dafc4;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .notification-content small {
+      display: block;
+      margin-top: 9px;
+      color: #61758e;
+    }
+
+    .unread-dot {
+      width: 9px;
+      height: 9px;
+      background: #2d8cff;
+      border-radius: 50%;
+      margin-top: 5px;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 15px;
+    }
+
+    .read-btn {
+      border: 0;
+      background: #1769d2;
+      color: #fff;
+      padding: 10px 15px;
+      border-radius: 9px;
+      cursor: pointer;
+    }
+
+    .empty,
+    .loading {
+      text-align: center;
+      padding: 55px 20px;
+      color: #8195ae;
+    }
+
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.6);
+      z-index: 998;
+    }
+
+    @media(max-width: 800px) {
+
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .overlay.show {
+        display: block;
+      }
+
+      .main {
+        margin-left: 0;
+        padding: 95px 15px 25px;
+      }
+
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="topbar">
+
+    <button class="menu-btn" id="menuButton">
+      ☰
+    </button>
+
+    <div class="logo">
+      JASON<span> INVEST</span>
+    </div>
+
+  </header>
+
+  <div class="overlay" id="overlay"></div>
+
+  <aside class="sidebar" id="sidebar">
+
+    <div class="sidebar-user">
+      <strong id="userName">Chargement...</strong>
+      <small id="userEmail">...</small>
+    </div>
+
+    <nav class="nav">
+
+      <a href="dash.html">
+        🏠 Tableau de bord
+      </a>
+
+      <a href="investissement.html">
+        📈 Investissement
+      </a>
+
+      <a href="translation.html">
+        💳 Dépôt / Retrait
+      </a>
+
+      <a href="vip.html">
+        👑 VIP
+      </a>
+
+      <a href="historique.html">
+        🧾 Historique
+      </a>
+
+      <a href="notification.html" class="active">
+        🔔 Notifications
+      </a>
+
+      <a href="profil.html">
+        👤 Profil
+      </a>
+
+      <a href="support.html">
+        💬 Support
+      </a>
+
+      <a href="#" id="logoutButton">
+        🚪 Déconnexion
+      </a>
+
+    </nav>
+
+  </aside>
+
+  <main class="main">
+
+    <div class="page-title">
+      <h1>Notifications</h1>
+      <p>
+        Retrouvez ici les informations importantes de JASON INVEST.
+      </p>
+    </div>
+
+    <div class="actions">
+      <button class="read-btn" id="readAllButton">
+        Tout marquer comme lu
+      </button>
+    </div>
+
+    <section
+      id="notifications"
+      class="notification-card"
+    >
+
+      <div class="loading">
+        Chargement des notifications...
+      </div>
+
+    </section>
+
+  </main>
+
+  <script src="app.js"></script>
+  <script src="notification.js"></script>
+
+</body>
+</html>

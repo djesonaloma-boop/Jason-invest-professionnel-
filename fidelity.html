@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>JASON INVEST — Fidélité</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #07111f;
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    /* =========================
+       SIDEBAR
+    ========================= */
+
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 260px;
+      background: #0b1728;
+      border-right: 1px solid rgba(255,255,255,.08);
+      padding: 22px 15px;
+      overflow-y: auto;
+      z-index: 1000;
+      transition: .3s;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 800;
+      padding: 8px 10px 24px;
+    }
+
+    .logo span {
+      color: #f5c542;
+    }
+
+    .user-mini {
+      background: #101f34;
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 23px;
+    }
+
+    .user-mini-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .avatar {
+      width: 43px;
+      height: 43px;
+      min-width: 43px;
+      border-radius: 50%;
+      background: linear-gradient(135deg,#17385c,#f5c542);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      overflow: hidden;
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .user-name {
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .user-email {
+      font-size: 10px;
+      color: #788aa2;
+      margin-top: 4px;
+      max-width: 155px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .nav-title {
+      color: #6f8198;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 17px 10px 9px;
+    }
+
+    .nav {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .nav button {
+      border: 0;
+      background: transparent;
+      color: #aebbd0;
+      padding: 13px 12px;
+      border-radius: 10px;
+      text-align: left;
+      font-size: 13px;
+      width: 100%;
+    }
+
+    .nav button:hover,
+    .nav button.active {
+      background: #153251;
+      color: #fff;
+    }
+
+    .nav button.logout {
+      color: #ff7777;
+    }
+
+    /* =========================
+       MAIN
+    ========================= */
+
+    .main {
+      margin-left: 260px;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      height: 72px;
+      background: #07111f;
+      border-bottom: 1px solid rgba(255,255,255,.07);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 28px;
+      position: sticky;
+      top: 0;
+      z-index: 900;
+    }
+
+    .topbar-left,
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .topbar-title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .mobile-menu,
+    .topbar-btn {
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: #101f34;
+      color: white;
+      border-radius: 10px;
+      font-size: 19px;
+    }
+
+    .mobile-menu {
+      display: none;
+    }
+
+    /* =========================
+       CONTENT
+    ========================= */
+
+    .content {
+      max-width: 1100px;
+      margin: auto;
+      padding: 25px;
+    }
+
+    .welcome {
+      background:
+        radial-gradient(
+          circle at right,
+          rgba(245,197,66,.13),
+          transparent 35%
+        ),
+        linear-gradient(135deg,#102b49,#0b1728);
+
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 17px;
+      padding: 25px;
+      margin-bottom: 20px;
+    }
+
+    .welcome h1 {
+      font-size: 25px;
+      margin-bottom: 8px;
+    }
+
+    .welcome h1 span {
+      color: #f5c542;
+    }
+
+    .welcome p {
+      color: #8da0b8;
+      font-size: 13px;
+    }
+
+    /* =========================
+       POINTS CARD
+    ========================= */
+
+    .points-card {
+      background: linear-gradient(135deg,#17385c,#0c1d31);
+      border: 1px solid rgba(245,197,66,.2);
+      border-radius: 18px;
+      padding: 30px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .points-icon {
+      font-size: 42px;
+      margin-bottom: 10px;
+    }
+
+    .points-label {
+      color: #93a5bc;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .points-value {
+      color: #f5c542;
+      font-size: 48px;
+      font-weight: 800;
+      margin: 8px 0;
+    }
+
+    .points-equivalent {
+      color: #a8b6c9;
+      font-size: 12px;
+    }
+
+    /* =========================
+       GRID
+    ========================= */
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .panel {
+      background: #0b1728;
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 15px;
+      overflow: hidden;
+    }
+
+    .panel-title {
+      padding: 17px 19px;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .panel-body {
+      padding: 20px;
+    }
+
+    /* =========================
+       LEVEL
+    ========================= */
+
+    .level-box {
+      text-align: center;
+    }
+
+    .level-name {
+      color: #f5c542;
+      font-size: 27px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .progress-container {
+      width: 100%;
+      height: 9px;
+      background: #17263a;
+      border-radius: 20px;
+      overflow: hidden;
+      margin: 14px 0 8px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: #f5c542;
+      border-radius: 20px;
+      transition: width .5s;
+    }
+
+    .progress-text {
+      color: #71849d;
+      font-size: 10px;
+    }
+
+    /* =========================
+       REWARDS
+    ========================= */
+
+    .reward {
+      background: #101f34;
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: 11px;
+      padding: 14px;
+      margin-bottom: 10px;
+    }
+
+    .reward:last-child {
+      margin-bottom: 0;
+    }
+
+    .reward strong {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 5px;
+    }
+
+    .reward span {
+      color: #71849d;
+      font-size: 10px;
+    }
+
+    /* =========================
+       INFO
+    ========================= */
+
+    .info {
+      margin-top: 18px;
+      background: #0b1728;
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 15px;
+      padding: 20px;
+    }
+
+    .info h3 {
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .info p {
+      color: #8293aa;
+      font-size: 11px;
+      line-height: 1.7;
+    }
+
+    /* =========================
+       FOOTER
+    ========================= */
+
+    .footer {
+      text-align: center;
+      color: #506177;
+      font-size: 10px;
+      padding: 28px 10px;
+    }
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media(max-width:800px) {
+
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .main {
+        margin-left: 0;
+      }
+
+      .mobile-menu {
+        display: block;
+      }
+
+      .topbar {
+        padding: 0 15px;
+      }
+
+      .content {
+        padding: 15px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+    }
+
+    @media(max-width:500px) {
+
+      .points-card {
+        padding: 24px 15px;
+      }
+
+      .points-value {
+        font-size: 39px;
+      }
+
+      .welcome h1 {
+        font-size: 21px;
+      }
+
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+
+  <aside class="sidebar" id="sidebar">
+
+    <div class="logo">
+      JASON<span> INVEST</span>
+    </div>
+
+    <div class="user-mini">
+
+      <div class="user-mini-top">
+
+        <div class="avatar" id="userAvatar">
+          U
+        </div>
+
+        <div>
+
+          <div class="user-name" id="sidebarUserName">
+            Utilisateur
+          </div>
+
+          <div class="user-email" id="sidebarUserEmail">
+            —
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="nav-title">
+      Menu principal
+    </div>
+
+    <nav class="nav">
+
+      <button data-page="dashboard">
+        🏠 &nbsp; Tableau de bord
+      </button>
+
+      <button data-page="investissements">
+        📈 &nbsp; Investissements
+      </button>
+
+      <button data-page="activites">
+        📊 &nbsp; Mes activités
+      </button>
+
+      <button
+        class="active"
+        data-page="fidelite"
+      >
+        ⭐ &nbsp; Fidélité
+      </button>
+
+      <button data-page="parrainage">
+        👥 &nbsp; Parrainage
+      </button>
+
+      <button data-page="historique">
+        🧾 &nbsp; Historique
+      </button>
+
+      <button data-page="support">
+        💬 &nbsp; Support
+      </button>
+
+      <button data-page="notifications">
+        🔔 &nbsp; Notifications
+      </button>
+
+    </nav>
+
+    <div class="nav-title">
+      Compte
+    </div>
+
+    <nav class="nav">
+
+      <button data-page="profile">
+        👤 &nbsp; Mon profil
+      </button>
+
+      <button
+        class="logout"
+        id="logoutButton"
+      >
+        🚪 &nbsp; Déconnexion
+      </button>
+
+    </nav>
+
+  </aside>
+
+
+  <!-- MAIN -->
+
+  <main class="main">
+
+    <header class="topbar">
+
+      <div class="topbar-left">
+
+        <button
+          class="mobile-menu"
+          id="menuToggle"
+        >
+          ☰
+        </button>
+
+        <div class="topbar-title">
+          Fidélité
+        </div>
+
+      </div>
+
+      <div class="topbar-right">
+
+        <button
+          class="topbar-btn"
+          id="notificationButton"
+        >
+          🔔
+        </button>
+
+      </div>
+
+    </header>
+
+
+    <section class="content">
+
+      <!-- WELCOME -->
+
+      <div class="welcome">
+
+        <h1>
+          Programme de
+          <span>fidélité</span> ⭐
+        </h1>
+
+        <p>
+          Accumulez vos points et profitez de vos avantages.
+        </p>
+
+      </div>
+
+
+      <!-- POINTS -->
+
+      <div class="points-card">
+
+        <div class="points-icon">
+          ⭐
+        </div>
+
+        <div class="points-label">
+          Mes points disponibles
+        </div>
+
+        <div
+          class="points-value"
+          id="pointsValue"
+        >
+          0
+        </div>
+
+        <div
+          class="points-equivalent"
+          id="pointsEquivalent"
+        >
+          Équivalent : 0 FC
+        </div>
+
+      </div>
+
+
+      <!-- GRID -->
+
+      <div class="grid">
+
+        <!-- NIVEAU -->
+
+        <div class="panel">
+
+          <div class="panel-title">
+            🏆 Mon niveau fidélité
+          </div>
+
+          <div class="panel-body">
+
+            <div class="level-box">
+
+              <div
+                class="level-name"
+                id="levelName"
+              >
+                Niveau actuel
+              </div>
+
+              <div class="progress-container">
+
+                <div
+                  class="progress-bar"
+                  id="progressBar"
+                ></div>
+
+              </div>
+
+              <div
+                class="progress-text"
+                id="progressText"
+              >
+                Chargement...
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- RECOMPENSES -->
+
+        <div class="panel">
+
+          <div class="panel-title">
+            🎁 Récompenses
+          </div>
+
+          <div class="panel-body">
+
+            <div class="reward">
+
+              <strong>
+                ⭐ 100 points
+              </strong>
+
+              <span>
+                Équivalent indicatif : 1 000 FC
+              </span>
+
+            </div>
+
+            <div class="reward">
+
+              <strong>
+                ⭐ 500 points
+              </strong>
+
+              <span>
+                Palier fidélité supérieur
+              </span>
+
+            </div>
+
+            <div class="reward">
+
+              <strong>
+                ⭐ 1 000 points
+              </strong>
+
+              <span>
+                Palier fidélité premium
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- INFO -->
+
+      <div class="info">
+
+        <h3>
+          Comment fonctionne la fidélité ?
+        </h3>
+
+        <p>
+          Les points de fidélité sont attribués selon les règles
+          définies par JASON INVEST. Les paliers et récompenses
+          peuvent être modifiés par l'administration.
+          Les valeurs affichées ici sont indicatives et ne
+          constituent pas une garantie de gain ou de rendement.
+        </p>
+
+      </div>
+
+
+      <div class="footer">
+        © JASON INVEST — Tous droits réservés.
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <script src="app.js"></script>
+  <script src="fidelity.js"></script>
+
+</body>
+</html>
